@@ -100,7 +100,7 @@ foreach($products as $product): ?>
                     window.location.href = '/';
                 },
                 error: function(xhr, status, error) {
-                    alert('An error occurred: ' + xhr.responseText);
+                 console.log(error);
                 }
             });
         });
