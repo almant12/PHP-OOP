@@ -14,7 +14,7 @@ $productController = new ProductController($db);
 $products = $productController->getAllProducts();
 
 // //Delete Product By Id;
-if($_SERVER['REQUEST_METHOD'] == 'POST' && $_SERVER['REQUEST_URI'] == '/delete-product'){
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $ids = $data['ids'];
     $productController->deleteProductById($ids);
     header('Location: /');
@@ -93,7 +93,7 @@ foreach($products as $product): ?>
                     selectedProductIds.push($(this).val());
                    
                     $.ajax({
-                url: '/delete-product',
+                url: 'index.php',
                 type: 'POST',
                 data: {ids: selectedProductIds },
                 success: function(response) {
