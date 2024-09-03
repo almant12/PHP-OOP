@@ -58,6 +58,11 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
         .form-section h5 {
             margin-bottom: 15px;
         }
+        .error-message {
+            color: red;
+            font-size: 0.875em;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -65,13 +70,14 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
         <div class="row">
             <div class="col-12">
                 <form id="product_form" method="post" action="addProduct.php">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>Product Add</h1>
-             <div>
-              <button type="submit" class="btn btn-primary me-2">Save</button>
-              <a href="/" type="button" class="btn btn-secondary">Cancel</a>
-             </div>
-            </div>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h1>Product Add</h1>
+                        <div>
+                            <button type="submit" class="btn btn-primary me-2">Save</button>
+                            <a href="/" type="button" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </div>
+                    <div id="error-container" class="mb-3"></div>
                     <div class="mb-3">
                         <label for="sku" class="form-label">SKU</label>
                         <input type="text" class="form-control" id="sku" name="sku">
@@ -88,9 +94,9 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
                         <label for="productType" class="form-label">Type Switcher</label>
                         <select class="form-select" id="productType" name="productType">
                             <option value="">Type Switcher</option>
-                            <option value="DVD" id="DVD">DVD</option>
-                            <option value="Furniture" id="Furniture">Furniture</option>
-                            <option value="Book" id="Book">Book</option>
+                            <option value="DVD">DVD</option>
+                            <option value="Furniture">Furniture</option>
+                            <option value="Book">Book</option>
                         </select>
                     </div>
                     <div class="form-section" id="productDetails">
@@ -145,6 +151,49 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
                 document.getElementById('Furniture-details').style.display = 'block';
             } else if (selectedType === 'Book') {
                 document.getElementById('Book-details').style.display = 'block';
+            }
+        });
+
+        document.getElementById('product_form').addEventListener('submit', function(event) {
+            var errors = [];
+            var sku = document.getElementById('sku').value.trim();
+            var name = document.getElementById('name').value.trim();
+            var price = document.getElementById('price').value.trim();
+            var productType = document.getElementById('productType').value;
+            var size = document.getElementById('size').value.trim();
+            var height = document.getElementById('height').value.trim();
+            var width = document.getElementById('width').value.trim();
+            var length = document.getElementById('length').value.trim();
+            var weight = document.getElementById('weight').value.trim();
+
+            if (!sku || !name || !price || !productType) {
+                errors.push('Please, submit required data');
+            }
+
+            if (isNaN(price) || price <= 0) {
+                errors.push('Please, provide the data of indicated type for Price');
+            }
+
+            if (productType === 'DVD' && !size) {
+                errors.push('Please, submit required data for DVD Size');
+            } else if (productType === 'Furniture') {
+                if (!height || isNaN(height) || height <= 0) {
+                    errors.push('Please, provide the data of indicated type for Height');
+                }
+                if (!width || isNaN(width) || width <= 0) {
+                    errors.push('Please, provide the data of indicated type for Width');
+                }
+                if (!length || isNaN(length) || length <= 0) {
+                    errors.push('Please, provide the data of indicated type for Length');
+                }
+            } else if (productType === 'Book' && (!weight || isNaN(weight) || weight <= 0)) {
+                errors.push('Please, provide the data of indicated type for Weight');
+            }
+
+            if (errors.length > 0) {
+                event.preventDefault();
+                var errorContainer = document.getElementById('error-container');
+                errorContainer.innerHTML = errors.map(error => `<div class="error-message">${error}</div>`).join('');
             }
         });
     </script>
