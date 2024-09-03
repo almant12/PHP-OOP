@@ -5,6 +5,7 @@ require_once 'app/Model/Furniture.php';
 require_once 'app/Model/Product.php';
 require_once 'app/Model/Book.php';
 
+
 if($_SERVER['REQUEST_METHOD']=='POST'){
 
         $sku = $_POST['sku'];
@@ -64,15 +65,13 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
         <div class="row">
             <div class="col-12">
                 <form id="product_form" method="post" action="addProduct.php">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h1>Product Add</h1>
-                        <div>
-                            <button type="submit" class="btn btn-primary me-2">Save</button>
-                            <a href="/" type="button" class="btn btn-secondary">Cancel</a>
-                        </div>
-                    </div>
-                    <hr>
-                    <div id="error_message" class="text-danger"></div>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Product Add</h1>
+             <div>
+              <button type="submit" class="btn btn-primary me-2">Save</button>
+              <a href="/" type="button" class="btn btn-secondary">Cancel</a>
+             </div>
+            </div>
                     <div class="mb-3">
                         <label for="sku" class="form-label">SKU</label>
                         <input type="text" class="form-control" id="sku" name="sku">
@@ -147,43 +146,6 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
             } else if (selectedType === 'Book') {
                 document.getElementById('Book-details').style.display = 'block';
             }
-        });
-
-        document.getElementById('product_form').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            var sku = document.getElementById('sku').value.trim();
-            var name = document.getElementById('name').value.trim();
-            var price = document.getElementById('price').value.trim();
-            var productType = document.getElementById('productType').value;
-            var isValid = true;
-            var errorMessage = '';
-
-            if (!sku || !name || !price || !productType) {
-                isValid = false;
-                errorMessage = 'Please submit the required data.';
-            }
-
-            if (productType === 'DVD' && !document.getElementById('size').value.trim()) {
-                isValid = false;
-                errorMessage = 'Please provide the size for the DVD.';
-            } else if (productType === 'Furniture' && (!document.getElementById('height').value.trim() ||
-                !document.getElementById('width').value.trim() || !document.getElementById('length').value.trim())) {
-                isValid = false;
-                errorMessage = 'Please provide all dimensions for the Furniture.';
-            } else if (productType === 'Book' && !document.getElementById('weight').value.trim()) {
-                isValid = false;
-                errorMessage = 'Please provide the weight for the Book.';
-            }
-
-            if (!isValid) {
-                document.getElementById('error_message').innerText = errorMessage;
-                return;
-            }
-
-            // You can now perform the SKU uniqueness check with AJAX here.
-
-            this.submit();
         });
     </script>
 </body>
